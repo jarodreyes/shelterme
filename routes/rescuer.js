@@ -68,14 +68,23 @@ function customizeAnimal(body, user, req) {
       user.regressStatus();
     }
     if (answered) {
-      user.setPref('animalPref', body);
-      message = user.editing ? user.setPref('animalPref', body) : `Okay, now for the fun part. Take a picture of where your adorable ${user.animalPref} will spend most of its time. Your apartment? The backyard? Wherever you live.`;
+      if (user.editing) {
+        message = user.setPref('animalPref', body);
+      } else {
+        user.setPref('animalPref', body)
+        message = `Okay, now for the fun part. Take a picture of where your adorable ${user.animalPref} will spend most of its time. Your apartment? The backyard? Wherever you live.`;
+      }
     }
   } else if (!user.agePref) {
     message = `${commands.age}`;
     var answered = _.contains(ages, body);
     if (answered) {
-      message = user.editing ? user.setPref('agePref', body) : `Great! We'll find you a pet soul mate that will thrive in your living environment.`;
+      if (user.editing) {
+        message = user.setPref('agePref', body);
+      } else {
+        user.setPref('agePref', body);
+        message = `Great! We'll find you a pet soul mate that will thrive in your living environment.`;
+      }
       user.advanceStatus();
       // Send them a pet!
       petMatcher.findPet(user);
@@ -127,7 +136,7 @@ router.post('/incoming/', function (req,res,next) {
       // Check if user is new, or is customizing their pet.
       switch (user.state) {
         case 'new':
-          user.sendMessage("Hello happy pet hunter, I'm ShelterBuddy your helpful pet finder. Tell me about yourself? What is your zipcode?", 'http://jardiohead.s3.amazonaws.com/instructions.jpg')
+          user.sendMessage("Hello happy pet hunter, I'm ShelterPal your helpful pet finder. Tell me about yourself? What is your zipcode?", 'http://jardiohead.s3.amazonaws.com/instructions.jpg')
           user.advanceStatus();
           break;
         case 'customizing':

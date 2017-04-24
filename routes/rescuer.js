@@ -48,7 +48,7 @@ var animals = ['dog', 'cat'],
   commands = {
     'age': 'What age animal do you prefer? [Baby, Young, Adult, Senior]',
     'sex': 'Do you prefer [male] or [female]?',
-    'size': 'What size animal do you want? [Small, Medium, Large, XL, Any]',
+    'size': 'What size animal do you want? [Small, Medium, Large, XL]',
     'animal': 'What are you looking for? [Dog, Cat]',
     'house': 'Do you care if it is house trained? [Yes, No]'
   };
@@ -119,6 +119,7 @@ function customizeAnimal(body, user, req) {
         message = 'Sorry, we were unable to process that image. Try sending a different one.';
       }
     });
+    var pet = petMatcher.findPet(user);
   }
   console.log(`Message: ${message}`);
   return {media: media, message: message}

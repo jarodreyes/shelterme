@@ -90,6 +90,7 @@ function customizeAnimal(body, user, req) {
       } else {
         user.setPref('agePref', body);
         message = `Great! We'll find you a pet soul mate that will thrive in your living environment.`;
+        user.sendMessage("If at any time you'd like to change your search here are some helpful instructions.", 'http://jardiohead.s3.amazonaws.com/instructions.jpg');
       }
       user.advanceStatus();
       // Send them a pet!
@@ -143,7 +144,7 @@ router.post('/incoming/', function (req,res,next) {
       // Check if user is new, or is customizing their pet.
       switch (user.state) {
         case 'new':
-          user.sendMessage("Hello happy pet hunter, I'm ShelterPal your helpful pet finder. Tell me about yourself? What is your zipcode?", 'http://jardiohead.s3.amazonaws.com/instructions.jpg')
+          message = "Hello happy pet hunter, I'm ShelterPal your helpful pet finder. Tell me about yourself? What is your zipcode?";
           user.advanceStatus();
           break;
         case 'customizing':

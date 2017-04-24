@@ -977,13 +977,16 @@ section.top_banner_bg:after {
   position: relative;
   z-index: 2;
 }
+.present p {
+  color: white;
+}
 
 .present h1 {
   font-size: 54px;
   font-weight: 300;
   color: #fff;
   line-height:76px;
-  padding-bottom:120px;
+  padding-bottom:20px;
 }
 .present h5 {
   font-weight: 300;

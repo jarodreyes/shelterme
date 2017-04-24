@@ -5,6 +5,7 @@ var express = require('express'),
   twilio = require('twilio'),
   petMatcher = require('../lib/petmatcher'),
   ImageChecker = require('../lib/image-checker'),
+  approvedTags = require('../lib/concepts.js'),
   User = require('../models/user'),
   _ = require('underscore');
 
@@ -25,13 +26,18 @@ function twimlMessage (message, media) {
 }
 
 function printTags (tags) {
+  var priorityTags = ['backyard', 'indoors', 'outdoors'];
   var uMessage = "Okay I've analyzed your picture, I detect ";
+  priorityTags = _.intersection(tags, priorityTags);
+  tags = _.intersection(tags, approvedTags);
+  console.log(priorityTags, tags);
   var smallTags = _.sample(tags, 4);
-  console.log(`in printTags: ${smallTags}`)
-  _.times(3, function(i) {
+  console.log(`in printTags: ${smallTags}`);
+  if (priorityTags.length > 0) uMessage += `${priorityTags[0]}, `;
+  _.times(2, function(i) {
     uMessage += `${smallTags[i]}, `;
   });
-  uMessage += `and ${smallTags[3]}. This will certainly help find the perfect pet.`;
+  uMessage += `and ${smallTags[2]}. This will certainly help find the perfect pet.`;
   return uMessage;
 }
 
@@ -102,7 +108,7 @@ function customizeAnimal(body, user, req) {
   if (numMedia > 0) {
     var incomingMedia = req.body.MediaUrl0;
     console.log(incomingMedia);
-    message = `Okay we're processing your picture, but one last question. ${commands.age}`
+    message = user.editing ? 'Okay we are processing your picture, hold tight.' : `Okay we're processing your picture, but one last question. ${commands.age}`;
     ImageChecker.check(incomingMedia, function(tags) {
       if (tags.length > 0) {
         user.addTags(tags, function() {
@@ -146,7 +152,7 @@ router.post('/incoming/', function (req,res,next) {
           break;
         default:
           var customizing = _.has(commands, body);
-          console.log(body, customizing);
+          console.log(numMedia, customizing);
           if (customizing || user.editing) {
             var appropriateResponse = {};
             user.editingPrefs(body, function() {
@@ -154,10 +160,15 @@ router.post('/incoming/', function (req,res,next) {
             });
             message = appropriateResponse.message;
             media = appropriateResponse.media;
+          } else if (numMedia > 0) {
+            user.editing = true;
+            user.save();
+            appropriateResponse = customizeAnimal(body, user, req);
+            message = appropriateResponse.message;
+            media = appropriateResponse.media;
           } else {
             var pet = petMatcher.findPet(user);
           }
-          
       }
       var twiml = twimlMessage(message, media);
       res.send(twiml.toString());

@@ -113,12 +113,13 @@ function customizeAnimal(body, user, req) {
         user.addTags(tags, function() {
           message = printTags(tags);
           user.sendMessage(message);
+          var pet = petMatcher.findPet(user);
         });
       } else {
         message = 'Sorry, we were unable to process that image. Try sending a different one.';
       }
     });
-    var pet = petMatcher.findPet(user);
+    
   }
   console.log(`Message: ${message}`);
   return {media: media, message: message}

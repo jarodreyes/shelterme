@@ -93,8 +93,6 @@ function customizeAnimal(body, user, req) {
         user.sendMessage("If at any time you'd like to change your search, here are some helpful instructions.", 'http://jardiohead.s3.amazonaws.com/instructions.jpg');
       }
       user.advanceStatus();
-      // Send them a pet!
-      petMatcher.findPet(user);
     }
   } else if (!user.sizePref) {
     message = `${commands.size}`;

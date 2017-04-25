@@ -78,7 +78,7 @@ function customizeAnimal(body, user, req) {
         message = user.setPref('animalPref', body);
       } else {
         user.setPref('animalPref', body)
-        message = `Okay, now for the fun part. Take a picture of where your adorable ${user.animalPref} will spend most of its time. Your apartment? The backyard? Wherever you live.`;
+        message = `Okay got it! Next, ${commands.age}`;
       }
     }
   } else if (!user.agePref) {
@@ -89,8 +89,8 @@ function customizeAnimal(body, user, req) {
         message = user.setPref('agePref', body);
       } else {
         user.setPref('agePref', body);
-        message = `Great! We'll find you a pet soul mate that will thrive in your living environment.`;
-        user.sendMessage("If at any time you'd like to change your search here are some helpful instructions.", 'http://jardiohead.s3.amazonaws.com/instructions.jpg');
+        message = `Okay, now for the fun part. Take a picture of where your adorable ${user.animalPref} will spend most of its time. Your apartment? The backyard? Wherever you live.`;
+        user.sendMessage("If at any time you'd like to change your search, here are some helpful instructions.", 'http://jardiohead.s3.amazonaws.com/instructions.jpg');
       }
       user.advanceStatus();
       // Send them a pet!
@@ -109,7 +109,7 @@ function customizeAnimal(body, user, req) {
   if (numMedia > 0) {
     var incomingMedia = req.body.MediaUrl0;
     console.log(incomingMedia);
-    message = user.editing ? 'Okay we are processing your picture, hold tight.' : `Okay we're processing your picture, but one last question. ${commands.age}`;
+    message = 'Okay we are processing your picture, hold tight.';
     ImageChecker.check(incomingMedia, function(tags) {
       if (tags.length > 0) {
         user.addTags(tags, function() {

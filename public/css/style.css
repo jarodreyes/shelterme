@@ -2029,7 +2029,16 @@ article {  margin: 0 0 70px;}
 
 }
 
-
+@media (min-width:300px) and (max-width:768px) {
+  .present p, .present h5 {
+    color: cornflowerblue;
+  }
+  section.top_banner_bg {
+    background: url("../images/background-mockup.jpg") repeat fixed 0px 100px / cover ;
+    padding-bottom: 0;
+    position: relative;
+  }
+}
 
 @media (min-width:500px) and (max-width:991px){
 .tags li {
